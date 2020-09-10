@@ -1,0 +1,21 @@
+@import "_variables.scss";
+@import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body{
+    font-family: 'Roboto', sans-serif;
+    nav.navbar {
+        #title-nav {
+            color: $text !important;
+        }
+        background-color: $primary;
+        ul {
+            li {
+                a {
+                    color: $text !important;
+                }
+            }
+        }
+        
+    }
+}
