@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}  
+
+{% block body %}
+    <div class="row">
+        <div class="col mt-4">
+            <h3>{{ vehicle.title }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <h4></h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h4 class="h2">Description :</h4>
+            <p class="">
+                {{ vehicle.description }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            {% include "vehicle/_delete.html.twig" %}
+        </div>
+        <div class="col-2">
+            <a class="btn btn-primary" href="{{ path('app_vehicle_edit', {'id': vehicle.id}) }}">Editer l'annonce</a>
+        </div>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,11 @@
+<div class="card my-4" id="form_create_vehicle">
+    <div class="card-body">
+        <h3 class="card-title text-center">Création de l'annonce</h3>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary btn-block">
+                {{ (app.request.get('_route') == 'app_vehicle_create') ? 'Créer' : 'Modifier' }}
+            </button> 
+        {{ form_end(form) }}
+    </div>
+</div>

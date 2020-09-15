@@ -16,6 +16,25 @@ body{
                 }
             }
         }
-        
     }
+    main {
+        #card-vehicle {
+            .row {
+                a.nav-link {
+                    color: $card_link !important;
+                }
+                p {
+                    font-size: 1.2rem;
+                    line-height: 1.1rem;
+                }
+            }
+        }
+
+        #form_create_vehicle {
+            label {
+                font-size: 1.2rem;
+            }
+        }
+    }
+    
 }

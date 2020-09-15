@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Vehicule' %}
+
+{% block body %}
+    
+    {% for vehicle in vehicles %}
+        <div class="row mt-5 py-2 border" id="card-vehicle">
+            <div class="col-6 col-lg-4 text-center">
+                <img class="" src="{{ vehicle.image ?? 'http://place-hold.it/300x200'}}">
+            </div>
+            <div class="col-4 col-lg-8">
+                <div class="row">
+                    <div class="col text-center">
+                        <a href="{{ path("app_vehicle_show", {"id": vehicle.id }) }}" class="nav-link"><h2>{{ vehicle.title }}</h2></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="">{{ vehicle.price }} €</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>[Lieu]</p> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>{{ vehicle.createdat|date("d/m/Y") }} à {{ vehicle.createdat|date("H:i") }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
