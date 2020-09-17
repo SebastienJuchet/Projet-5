@@ -20,6 +20,11 @@ class Vehicle
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $mark;
 
     /**
@@ -43,6 +48,16 @@ class Vehicle
     private $price;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fuelType;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $boxType;
+
+    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -57,14 +72,21 @@ class Vehicle
      */
     private $image;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getMark(): ?string
@@ -99,6 +121,30 @@ class Vehicle
     public function setYear(int $year): self
     {
         $this->year = $year;
+
+        return $this;
+    }
+ 
+    public function getFuelType(): ?string
+    {
+        return $this->fuelType;
+    }
+
+    public function setFuelType(string $fuelType): self
+    {
+        $this->fuelType = $fuelType;
+
+        return $this;
+    }
+
+    public function getBoxType(): ?string
+    {
+        return $this->boxType;
+    }
+
+    public function setBoxType(string $boxType): self
+    {
+        $this->boxType = $boxType;
 
         return $this;
     }
@@ -159,18 +205,6 @@ class Vehicle
     public function setImage(?string $image): self
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
 
         return $this;
     }

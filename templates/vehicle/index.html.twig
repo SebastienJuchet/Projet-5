@@ -17,12 +17,17 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p class="">{{ vehicle.price }} €</p>
+                        <p class="text-warning">{{ vehicle.price }} €</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <p>[Lieu]</p> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class=""><span class="font-weight-bold">Boite :</span> {{ vehicle.boxType }}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -33,5 +38,24 @@
             </div>
         </div>
     {% endfor %}
+    {% if pagesNb > 1 %}
+    <div class="row mt-4">
+        <div class="col">
+            <ul class="pagination">
+                <li class="page-item {{ (currentPage == 1) ? "disabled" : "" }}">
+                    <a class="page-link" href="{{ path("app_vehicle", {"currentPage": currentPage - 1}) }}" tabindex="-1">Previous</a>
+                </li>
+                {% for i in 1..pagesNb %}
+                    <li class="page-item {{ (currentPage == i) ? "active" : "" }}">
+                        <a class="page-link" href="{{ path('app_vehicle', {"currentPage": i}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                <li class="page-item {{ (currentPage == pagesNb) ? "disabled" : "" }}">
+                    <a class="page-link" href="{{ path("app_vehicle", {"currentPage": currentPage + 1}) }}">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
 
 {% endblock %}

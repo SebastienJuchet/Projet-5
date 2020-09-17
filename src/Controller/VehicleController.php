@@ -22,19 +22,24 @@ class VehicleController extends AbstractController
     }
 
     /**
-     * @Route("/", name="app_vehicle")
+     * @Route("/{currentPage}", name="app_vehicle", methods={"GET"}, requirements={"currentPage"="\d+"})
      *
      * @param VehicleRepository $vehicleRepository
+     * @param Request $request
      * @return Response
      */
-    public function index(VehicleRepository $vehicleRepository): Response
+    public function index(VehicleRepository $vehicleRepository, Request $request, int $currentPage = 1): Response
     {
-        $vehicles = $vehicleRepository->findBy(
-            [],
-            ['createdAt' => 'DESC']
-        );
+        $limit = 5;
+        $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
+        $allVehicles = $vehicleRepository->findAll();
+        $pagesNb = ceil(count($allVehicles) / $limit);
 
-        return $this->render('vehicle/index.html.twig', compact('vehicles'));
+        return $this->render('vehicle/index.html.twig', [
+            'vehicles' => $vehicles, 
+            'pagesNb' => $pagesNb,
+            'currentPage' => $currentPage
+        ]);
     }
 
     /**
