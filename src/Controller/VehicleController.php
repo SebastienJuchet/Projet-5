@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
@@ -9,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -62,13 +64,17 @@ class VehicleController extends AbstractController
      */
     public function create(Request $request): Response
     {
+        
         $vehicle = new Vehicle;
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+
             $vehicle = $form->getData();
-            $vehicle->setCreatedAt(new \DateTime());
+            $vehicle->setCreatedAt(new \DateTime())
+                    ->setUserId($user);
             $this->em->persist($vehicle);
             $this->em->flush();
 

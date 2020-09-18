@@ -23,8 +23,14 @@ class UserFixtures extends Fixture
     
         $password = $this->encoder->encodePassword($user, 'azerty');
         $user->setPassword($password);
+        
+        $user2 = new User();
+        $user2->setEmail('test@gmail.com');
     
+        $user2->setPassword($password);
+
         $manager->persist($user);
+        $manager->persist($user2);
         $manager->flush();
     }
 }
