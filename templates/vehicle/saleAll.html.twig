@@ -4,20 +4,20 @@
 
 {% block body %}
     
-    {% for vehicle in vehicles %}
+    {% for vehicleSale in vehiclesSale %}
         <div class="row mt-5 py-2 border" id="card-vehicle">
             <div class="col-6 col-lg-4 text-center">
-                <img class="" src="{{ vehicle.image ?? 'http://place-hold.it/300x200'}}">
+                <img class="" src="{{ vehicleSale.image ?? 'http://place-hold.it/300x200'}}">
             </div>
             <div class="col-4 col-lg-8">
                 <div class="row">
                     <div class="col text-center">
-                        <a href="{{ path("app_vehicle_show", {"id": vehicle.id }) }}" class="nav-link"><h2>{{ vehicle.title }}</h2></a>
+                        <a href="{{ path("app_vehicle_show", {"id": vehicleSale.id }) }}" class="nav-link"><h2>{{ vehicleSale.title }}</h2></a>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p class="text-warning">{{ vehicle.price }} €, {{ vehicle.sale }}</p>
+                        <p class="text-warning">{{ vehicleSale.price }} €, {{ vehicleSale.sale }}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -27,25 +27,21 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p class=""><span class="font-weight-bold">Boite :</span> {{ vehicle.boxType }}</p>
+                        <p class=""><span class="font-weight-bold">Boite :</span> {{ vehicleSale.boxType }}</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p>{{ vehicle.createdat|date("d/m/Y") }} à {{ vehicle.createdat|date("H:i") }}</p>
+                        <p>{{ vehicleSale.createdat|date("d/m/Y") }} à {{ vehicleSale.createdat|date("H:i") }}</p>
                     </div>
                 </div>
             </div>
         </div>
     {% endfor %}
-    <pre>
-        {{ dump(app.request.attributes.get('_route')) }}
-    </pre>
+    
     {% if pagesNb > 1 %}
-        {% if app.request.attributes.get('_route') == 'app_vehicle' %}
-            {% include "vehicle/partials/_paginationAll.html.twig" %}
-        {% elseif app.request.attributes.get('_route') == 'app_vehicle_sale' %}
-            {{vehicle.price}}
+        {% if app.request.attributes.get('_route') == 'app_vehicle_sale' %}
+            {% include "vehicle/partials/_paginationSale.html.twig" %}
         {% endif %}
     {% endif %}
 

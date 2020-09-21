@@ -33,8 +33,20 @@ class VehicleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    
 
+    public function findAllSale(int $currentPage, int $limit, $sale)
+    {
+        
+        return $this->createQueryBuilder('v')
+            ->where('v.sale > ?1')
+            ->setParameter(1, $sale)
+            ->setFirstResult(($currentPage - 1) * $limit)
+            ->orderBy('v.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?Vehicle
     {

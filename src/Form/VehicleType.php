@@ -16,10 +16,18 @@ class VehicleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('sale', ChoiceType::class, [
+                'label' => 'Vente ou location',
+                'choices' => [
+                    'Vente' => 'vente',
+                    'Location' => 'location'
+                ]
+            ])
             ->add('title', TextType::class, ['label' => 'Titre de l\'annonce'])
             ->add('mark', TextType::class, ['label' => 'Marque'])
             ->add('model', TextType::class, ['label' => 'Modèle'])
             ->add('fuelType', ChoiceType::class, [
+                'label' => 'Type de carburant',
                 'choices' => [
                     'Essence' => 'essence',
                     'Diesel' => 'diesel',
@@ -28,6 +36,7 @@ class VehicleType extends AbstractType
                     'Gpl' => 'gpl'
                 ]])
             ->add('boxType', ChoiceType::class, [
+                'label' => 'Boite de vitesse',
                 'choices' => [
                     'Manuel' => 'manuel',
                     'Automatique' => 'automatique',

@@ -45,7 +45,59 @@ class VehicleController extends AbstractController
     }
 
     /**
-     * @Route("/show/{id}")
+     * @Route("/vente/{currentPage}", name="app_vehicle_sale", requirements={"currentPage"="\d+"})
+     *
+     * @param VehicleRepository $vehicleRepository
+     * @param Request $request
+     * @return Response
+     */
+    public function allSale(VehicleRepository $vehicleRepository, Request $request, int $currentPage = 1): Response
+    {
+        $limit = 5;
+        $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
+        
+        $vehiclesSale = $vehicleRepository->findBy(
+            ['sale' => 'vente'],
+            ['createdAt' => 'DESC'],
+            $limit,
+            ($currentPage - 1) * $limit
+        );
+
+        return $this->render('vehicle/saleAll.html.twig', [
+            'vehiclesSale' => $vehiclesSale, 
+            'pagesNb' => $pagesNb,
+            'currentPage' => $currentPage
+        ]);
+    }
+
+    /**
+     * @Route("/location/{currentPage}", name="app_vehicle_rent", requirements={"currentPage"="\d+"})
+     *
+     * @param VehicleRepository $vehicleRepository
+     * @param integer $currentPage
+     * @return Response
+     */
+    public function allRent(VehicleRepository $vehicleRepository, int $currentPage = 1): Response
+    {
+        $limit = 5;
+        $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
+        
+        $vehiclesRent = $vehicleRepository->findBy(
+            ['sale' => 'location'],
+            ['createdAt' => 'DESC'],
+            $limit,
+            ($currentPage - 1) * $limit
+        );
+
+        return $this->render('vehicle/rentAll.html.twig', [
+            'vehiclesRent' => $vehiclesRent, 
+            'pagesNb' => $pagesNb,
+            'currentPage' => $currentPage
+        ]);
+    }
+
+    /**
+     * @Route("/show/{id}", name="app_vehicle_show", requirements={"id"="\d+"})
      *
      * @param Vehicle $vehicle
      * @return Response
@@ -128,5 +180,5 @@ class VehicleController extends AbstractController
         }
            
         return $this->redirectToRoute('app_vehicle');
-   }
+    }
 }

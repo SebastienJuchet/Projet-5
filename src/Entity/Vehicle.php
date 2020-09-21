@@ -78,6 +78,11 @@ class Vehicle
      */
     private $UserId;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $sale;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -235,6 +240,18 @@ class Vehicle
     public function setUserId(?User $UserId): self
     {
         $this->UserId = $UserId;
+
+        return $this;
+    }
+
+    public function getSale(): ?string
+    {
+        return $this->sale;
+    }
+
+    public function setSale(string $sale): self
+    {
+        $this->sale = $sale;
 
         return $this;
     }

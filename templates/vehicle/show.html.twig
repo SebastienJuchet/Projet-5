@@ -17,16 +17,19 @@
             <h4 class="h2">Description :</h4>
             <p class="">
                 {{ vehicle.description }}
+                {{ vehicle.sale }}
             </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-2">
-            {% include "vehicle/_delete.html.twig" %}
+    {% if app.user == vehicle.userId %}    
+        <div class="row">
+            <div class="col-2">
+                {% include "vehicle/_delete.html.twig" %}
+            </div>
+            <div class="col-2">
+                <a class="btn btn-primary" href="{{ path('app_vehicle_edit', {'id': vehicle.id}) }}">Editer l'annonce</a>
+            </div>
         </div>
-        <div class="col-2">
-            <a class="btn btn-primary" href="{{ path('app_vehicle_edit', {'id': vehicle.id}) }}">Editer l'annonce</a>
-        </div>
-    </div>
+    {% endif %}
     
 {% endblock %}
