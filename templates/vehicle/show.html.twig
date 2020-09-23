@@ -24,7 +24,7 @@
     {% if app.user == vehicle.userId %}    
         <div class="row">
             <div class="col-2">
-                {% include "vehicle/_delete.html.twig" %}
+                {% include "vehicle/partials/_delete.html.twig" %}
             </div>
             <div class="col-2">
                 <a class="btn btn-primary" href="{{ path('app_vehicle_edit', {'id': vehicle.id}) }}">Editer l'annonce</a>

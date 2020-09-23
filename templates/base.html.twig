@@ -22,13 +22,18 @@
                         <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                     </li>
                     {% if app.user %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path("app_vehicle_create") }}">Nouvelle annonce</a>
-                        </li>
+                        {% if app.user.isVerified == true %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path("app_vehicle_create") }}">Nouvelle annonce</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path("app_logout") }}">Se déconnecter</a>
                         </li>
                     {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path("app_register") }}">Créer un compte</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path("app_login") }}">Se connecter</a>
                         </li>
@@ -39,7 +44,21 @@
                 </form>
             </div>
         </nav>
-
+        {% if app.user.isVerified == false %}
+            <div class="alert alert-danger text-center">
+                Merci de confirmer votre adresse avant de continuer !
+            </div>
+        {% endif %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
         <main class="container">
             {% block body %}{% endblock %}
         </main>
@@ -48,4 +67,4 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </body>
-</html>
+</html> 
