@@ -3,6 +3,15 @@
         <h3 class="card-title text-center">Création de l'annonce</h3>
         {{ form_start(form) }}
         {{ form_widget(form) }}
+            {% if app.request.attributes.get('_route') == 'app_vehicle_edit' %}
+                <h3>Photos(s)</h3>
+                {% for picture in vehicle.pictures %}
+                    <div class="my-3">
+                        <img src="{{ asset('pictures/') ~ picture.name }}" alt="Image">
+                        <a href="{{ path('app_delete_picture', {'id': picture.id}) }}" class="delete-picture align-top" data-token="{{ csrf_token('delete')  ~ picture.id }}"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                {% endfor %}
+            {% endif %}
             <button type="submit" class="btn btn-primary btn-block">
                 {{ (app.request.get('_route') == 'app_vehicle_create') ? 'Créer' : 'Modifier' }}
             </button> 

@@ -1,27 +1,52 @@
 {% extends "base.html.twig" %}  
 
 {% block body %}
-    <div class="row">
-        <div class="col mt-4">
-            <h3>{{ vehicle.title }}</h3>
+    <div class="test">
+        <div class="row">
+            <div class="col mt-4">
+                <h3 class="h1 text-center">{{ vehicle.title }}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% if vehicle.pictures is empty %}
+                    <img src="{{ asset('pictures/default/sans-photo.jpg') }}" alt="">
+                {% else %}
+                    {% for picture in vehicle.pictures %}
+                        <img src="{{ asset('pictures/') ~ picture.name }}" alt="">
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <h4 class="h2"><u>Caractéristiques :</u></h4>
+                <p class="h4">
+                    <span class="font-weight-bold">Prix :</span> {{ vehicle.price }} €<br>
+                </p>
+                <p>
+                    <span class="font-weight-bold">Marque :</span> {{ vehicle.mark }}<br>
+                    <span class="font-weight-bold">Modèle :</span> {{ vehicle.model }}<br>
+                    <span class="font-weight-bold">Année :</span> {{ vehicle.year }}<br>
+                    <span class="font-weight-bold">Nombres de kms :</span> {{ vehicle.kms }}<br>
+                    <span class="font-weight-bold">Energie :</span> {{ vehicle.fuelType }}<br>
+                    <span class="font-weight-bold">Boîte de vitesse :</span> {{ vehicle.boxtype }}<br>
+                </p>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col text-center">
-            <h4></h4>
-        </div>
-    </div>
-
+    <hr>
     <div class="row">
         <div class="col">
-            <h4 class="h2">Description :</h4>
+            <h4 class="h2"><u>Description :</u></h4>
             <p class="">
                 {{ vehicle.description }}
-                {{ vehicle.sale }}
             </p>
         </div>
     </div>
-    {% if app.user == vehicle.userId %}    
+    {% if app.user == vehicle.user %}
+        <hr>  
         <div class="row">
             <div class="col-2">
                 {% include "vehicle/partials/_delete.html.twig" %}
@@ -33,3 +58,4 @@
     {% endif %}
     
 {% endblock %}
+  

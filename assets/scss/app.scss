@@ -35,6 +35,18 @@ body{
                 font-size: 1.2rem;
             }
         }
+
+        .delete-picture {
+                i.fas {
+                    font-size: 1.6rem;
+                    color: $danger;
+                }
+        }
+    }
+
+    .without-photo {
+        max-width: 320px;
+        height: auto;
     }
     
 }

@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\VehicleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\VehicleRepository;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VehicleRepository::class)
@@ -33,17 +37,19 @@ class Vehicle
     private $model;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $year;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
+     * @Assert\Regex("/[0-9]{1,6}/")
      */
     private $kms;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
+     * @Assert\Regex("/[0-9]{1,6}/")
      */
     private $price;
 
@@ -66,22 +72,32 @@ class Vehicle
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
-
+    
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime")
      */
-    private $image;
+    private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="vehicles")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $UserId;
+    private $user;
 
     /**
      * @ORM\Column(type="string")
      */
     private $sale;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="vehicle", orphanRemoval=true, cascade={"persist"})
+     */
+    private $pictures;
+
+    public function __construct()
+    {
+        $this->pictures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -124,12 +140,12 @@ class Vehicle
         return $this;
     }
 
-    public function getYear(): ?int
+    public function getYear(): ?string
     {
         return $this->year;
     }
 
-    public function setYear(int $year): self
+    public function setYear(string $year): self
     {
         $this->year = $year;
 
@@ -160,24 +176,24 @@ class Vehicle
         return $this;
     }
 
-    public function getKms(): ?int
+    public function getKms(): ?string
     {
         return $this->kms;
     }
 
-    public function setKms(int $kms): self
+    public function setKms(string $kms): self
     {
         $this->kms = $kms;
 
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?string
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(string $price): self
     {
         $this->price = $price;
 
@@ -208,14 +224,14 @@ class Vehicle
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->image;
+        return $this->updatedAt;
     }
 
-    public function setImage(?string $image): self
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
-        $this->image = $image;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -232,18 +248,6 @@ class Vehicle
         return $this;
     }
 
-    public function getUserId(): ?User
-    {
-        return $this->UserId;
-    }
-
-    public function setUserId(?User $UserId): self
-    {
-        $this->UserId = $UserId;
-
-        return $this;
-    }
-
     public function getSale(): ?string
     {
         return $this->sale;
@@ -252,6 +256,37 @@ class Vehicle
     public function setSale(string $sale): self
     {
         $this->sale = $sale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+            $picture->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getVehicle() === $this) {
+                $picture->setVehicle(null);
+            }
+        }
 
         return $this;
     }

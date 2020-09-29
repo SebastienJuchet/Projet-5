@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class VehicleType extends AbstractType
@@ -42,14 +42,21 @@ class VehicleType extends AbstractType
                     'Automatique' => 'automatique',
                     'Semi-automatique' => 'semi-automatique'
                 ]])
-            ->add('year', IntegerType::class, ['label' => 'Année de mise en circulation'])
-            ->add('kms', IntegerType::class, ['label' => 'Nombres de kilomètres'])
-            ->add('price', IntegerType::class, ['label' => 'Prix'])
-            ->add('description', TextareaType::class, ['label' => 'Description'])
-            ->add('image', TextType::class, [
-                'label' => 'Image', 
-                'required' => false
+            ->add('year', TextType::class, [
+                'label' => 'Année de mise en circulation',
+                'attr' => [
+                    'placeholder' => 'MM/AAAA'
+                ]
                 ])
+            ->add('kms', TextType::class, ['label' => 'Nombres de kilomètres'])
+            ->add('price', TextType::class, ['label' => 'Prix'])
+            ->add('description', TextareaType::class, ['label' => 'Description'])
+            ->add('pictures', FileType::class,[
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true
+            ])
         ;
     }
 

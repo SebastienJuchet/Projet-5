@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Picture;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
+use App\Repository\PictureRepository;
 use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/vehicule")
@@ -28,7 +31,7 @@ class VehicleController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function index(VehicleRepository $vehicleRepository, Request $request, int $currentPage = 1): Response
+    public function index(VehicleRepository $vehicleRepository, int $currentPage = 1): Response
     {
         $limit = 5;
         $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
@@ -114,19 +117,37 @@ class VehicleController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        
         $vehicle = new Vehicle;
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            //Récupère l'utilisateur
             $user = $this->getUser();
-
+            //Récupère les images
+            $pictures = $form->get('pictures')->getData();
+            //On boucle sur les images
+            foreach ($pictures as $picture) {
+                //On créer un nom unique
+                $safeName = md5(uniqid()) . '.' . $picture->guessExtension();
+                //Déplace le fichier dans le dossier indiqué avec getParameter
+                $picture->move(
+                    $this->getParameter('pictures_directory'),
+                    $safeName
+                );
+                $picture = new Picture;
+                $picture->setName($safeName);
+                $vehicle->addPicture($picture);
+            }
+            
             $vehicle = $form->getData();
             $vehicle->setCreatedAt(new \DateTime())
-                    ->setUserId($user);
+                    ->setUpdatedAt(new \DateTime())
+                    ->setUser($user);
             $this->em->persist($vehicle);
             $this->em->flush();
+
+            $this->addFlash('success', 'L\'annonce a bien était créée !');
 
             return $this->redirectToRoute('app_vehicle');
         }
@@ -146,11 +167,30 @@ class VehicleController extends AbstractController
      */
     public function edit(Vehicle $vehicle, Request $request): Response
     {
+        
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            //Récupère les images
+            $pictures = $form->get('pictures')->getData();
+            
+            //On boucle sur les images
+            foreach ($pictures as $picture) {
+                //On créer un nom unique
+                $safeName = md5(uniqid()) . '.' . $picture->guessExtension();
+                //Déplace le fichier dans le dossier indiqué avec getParameter
+                $picture->move(
+                    $this->getParameter('pictures_directory'),
+                    $safeName
+                );
+                $picture = new Picture;
+                $picture->setName($safeName);
+                $vehicle->addPicture($picture);
+            }
+            $vehicle->setUpdatedAt(new \DateTime());
             $this->em->flush();
+
+            $this->addFlash('success', 'L\'annonce a bien était modifiée !');
 
             return $this->redirectToRoute('app_vehicle');
         }
@@ -160,6 +200,22 @@ class VehicleController extends AbstractController
             'vehicle' => $vehicle,
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/delete/picture/{id}", name="app_delete_picture", methods={"DELETE"})
+     */
+    public function deleteImage(Request $request, PictureRepository $pictureRepository, $id)
+    {
+            $picture = $pictureRepository->findOneBy(['id' => $id]);
+            $name = $picture->getName();
+            dump($name);
+            unlink($this->getParameter('pictures_directory') . '/' . $name);
+
+            $this->em->remove($picture);
+            $this->em->flush();
+
+            return new JsonResponse(['success' => 1]);
     }
 
     /**

@@ -7,7 +7,13 @@
     {% for vehicle in vehicles %}
         <div class="row mt-5 py-2 border" id="card-vehicle">
             <div class="col-6 col-lg-4 text-center">
-                <img class="" src="{{ vehicle.image ?? 'http://place-hold.it/300x200'}}">
+            {% if vehicle.pictures is empty %}
+                <img src="{{ asset('pictures/default/sans-photo.jpg') }}" alt="sans photo" class="without-photo">
+            {% else %}
+                {% for picture in vehicle.pictures|slice(0,1) %}
+                    <img src="{{ asset('pictures/') ~ picture.name }}" alt="Image" class="without-photo">
+                {% endfor %}
+            {% endif %}
             </div>
             <div class="col-4 col-lg-8">
                 <div class="row">
@@ -38,9 +44,6 @@
             </div>
         </div>
     {% endfor %}
-    <pre>
-        {{ dump(app.request.attributes.get('_route')) }}
-    </pre>
     {% if pagesNb > 1 %}
         {% if app.request.attributes.get('_route') == 'app_vehicle' %}
             {% include "vehicle/partials/_paginationAll.html.twig" %}
