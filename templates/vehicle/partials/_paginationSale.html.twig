@@ -2,15 +2,15 @@
     <div class="col">
         <ul class="pagination">
             <li class="page-item {{ (currentPage == 1) ? "disabled" : "" }}">
-                <a class="page-link" href="{{ path("app_vehicle_sale", {"currentPage": currentPage - 1}) }}" tabindex="-1">Previous</a>
+                <a class="page-link" href="{{ path("app_vehicle", {type: 'sale', currentPage: currentPage - 1}) }}" tabindex="-1">Previous</a>
             </li>
             {% for i in 1..pagesNb %}
                 <li class="page-item {{ (currentPage == i) ? "active" : "" }}">
-                    <a class="page-link" href="{{ path('app_vehicle_sale', {"currentPage": i}) }}">{{ i }}</a>
+                    <a class="page-link" href="{{ path('app_vehicle', {type: 'sale', currentPage: i}) }}">{{ i }}</a>
                 </li>
             {% endfor %}
             <li class="page-item {{ (currentPage == pagesNb) ? "disabled" : "" }}">
-                <a class="page-link" href="{{ path("app_vehicle_sale", {"currentPage": currentPage + 1}) }}">Next</a>
+                <a class="page-link" href="{{ path("app_vehicle", {type: 'sale', currentPage: currentPage + 1}) }}">Next</a>
             </li>
         </ul>
     </div>

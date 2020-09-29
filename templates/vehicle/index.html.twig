@@ -45,10 +45,12 @@
         </div>
     {% endfor %}
     {% if pagesNb > 1 %}
-        {% if app.request.attributes.get('_route') == 'app_vehicle' %}
+        {% if app.request.attributes.get('type') == 'all' %}
             {% include "vehicle/partials/_paginationAll.html.twig" %}
-        {% elseif app.request.attributes.get('_route') == 'app_vehicle_sale' %}
-            {{vehicle.price}}
+        {% elseif app.request.attributes.get('type') == 'sale' %}
+            {% include "vehicle/partials/_paginationSale.html.twig" %}
+        {% elseif  app.request.attibutes.get('type') == 'rent' %}
+            {% include "vehicle/partials/_paginationRent.html.twig" %}
         {% endif %}
     {% endif %}
 

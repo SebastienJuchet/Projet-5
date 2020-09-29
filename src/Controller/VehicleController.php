@@ -25,73 +25,44 @@ class VehicleController extends AbstractController
     }
 
     /**
-     * @Route("/{currentPage}", name="app_vehicle", methods={"GET"}, requirements={"currentPage"="\d+"})
+     * @Route("/?type={type}&page={currentPage}", name="app_vehicle", methods={"GET"}, requirements={"currentPage"="\d+"})
      *
      * @param VehicleRepository $vehicleRepository
      * @param Request $request
      * @return Response
      */
-    public function index(VehicleRepository $vehicleRepository, int $currentPage = 1): Response
+    public function index(Request $request ,VehicleRepository $vehicleRepository, string $type = 'all' ,int $currentPage = 1): Response
     {
         $limit = 5;
-        $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
-        $allVehicles = $vehicleRepository->findAll();
-        $pagesNb = ceil(count($allVehicles) / $limit);
+        $type = $request->attributes->get('type');
+        if ($type === 'all') {
+            $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
+            $allVehicles = $vehicleRepository->findAll();
+            $pagesNb = ceil(count($allVehicles) / $limit);
+        }
 
+        if ($type === 'sale') {
+            $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
+            $vehicles = $vehicleRepository->findBy(
+                ['sale' => 'vente'],
+                ['createdAt' => 'DESC'],
+                $limit,
+                ($currentPage - 1) * $limit
+            );
+        }
+
+        if ($type === 'rent') {
+            $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
+        
+            $vehicles = $vehicleRepository->findBy(
+                ['sale' => 'location'],
+                ['createdAt' => 'DESC'],
+                $limit,
+                ($currentPage - 1) * $limit
+            );
+        }
         return $this->render('vehicle/index.html.twig', [
             'vehicles' => $vehicles, 
-            'pagesNb' => $pagesNb,
-            'currentPage' => $currentPage
-        ]);
-    }
-
-    /**
-     * @Route("/vente/{currentPage}", name="app_vehicle_sale", requirements={"currentPage"="\d+"})
-     *
-     * @param VehicleRepository $vehicleRepository
-     * @param Request $request
-     * @return Response
-     */
-    public function allSale(VehicleRepository $vehicleRepository, Request $request, int $currentPage = 1): Response
-    {
-        $limit = 5;
-        $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
-        
-        $vehiclesSale = $vehicleRepository->findBy(
-            ['sale' => 'vente'],
-            ['createdAt' => 'DESC'],
-            $limit,
-            ($currentPage - 1) * $limit
-        );
-
-        return $this->render('vehicle/saleAll.html.twig', [
-            'vehiclesSale' => $vehiclesSale, 
-            'pagesNb' => $pagesNb,
-            'currentPage' => $currentPage
-        ]);
-    }
-
-    /**
-     * @Route("/location/{currentPage}", name="app_vehicle_rent", requirements={"currentPage"="\d+"})
-     *
-     * @param VehicleRepository $vehicleRepository
-     * @param integer $currentPage
-     * @return Response
-     */
-    public function allRent(VehicleRepository $vehicleRepository, int $currentPage = 1): Response
-    {
-        $limit = 5;
-        $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
-        
-        $vehiclesRent = $vehicleRepository->findBy(
-            ['sale' => 'location'],
-            ['createdAt' => 'DESC'],
-            $limit,
-            ($currentPage - 1) * $limit
-        );
-
-        return $this->render('vehicle/rentAll.html.twig', [
-            'vehiclesRent' => $vehiclesRent, 
             'pagesNb' => $pagesNb,
             'currentPage' => $currentPage
         ]);
@@ -207,15 +178,15 @@ class VehicleController extends AbstractController
      */
     public function deleteImage(Request $request, PictureRepository $pictureRepository, $id)
     {
-            $picture = $pictureRepository->findOneBy(['id' => $id]);
-            $name = $picture->getName();
-            dump($name);
-            unlink($this->getParameter('pictures_directory') . '/' . $name);
+        $picture = $pictureRepository->findOneBy(['id' => $id]);
+        $name = $picture->getName();
+        dump($name);
+        unlink($this->getParameter('pictures_directory') . '/' . $name);
 
-            $this->em->remove($picture);
-            $this->em->flush();
+        $this->em->remove($picture);
+        $this->em->flush();
 
-            return new JsonResponse(['success' => 1]);
+        return new JsonResponse(['success' => 1]);
     }
 
     /**
