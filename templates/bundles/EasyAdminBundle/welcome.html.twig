@@ -1,0 +1,18 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title 'Administration du site' %}
+
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div class="alert alert-success">Nombres d'utilisateur : {{ userTt }} </div>
+            </div>
+            <div class="col-6">
+                <div class="alert alert-danger">Nombres d'annonces : {{ vehicleTt }} </div>
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

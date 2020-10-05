@@ -49,8 +49,10 @@
             {% include "vehicle/partials/_paginationAll.html.twig" %}
         {% elseif app.request.attributes.get('type') == 'sale' %}
             {% include "vehicle/partials/_paginationSale.html.twig" %}
-        {% elseif  app.request.attibutes.get('type') == 'rent' %}
+        {% elseif app.request.attributes.get('type') == 'rent' %}
             {% include "vehicle/partials/_paginationRent.html.twig" %}
+        {% elseif  app.request.attributes.get('type') == 'mes_annonces' %}
+            {% include "vehicle/partials/_paginationUserAll.html.twig" %}
         {% endif %}
     {% endif %}
 

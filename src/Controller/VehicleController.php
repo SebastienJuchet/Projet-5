@@ -61,6 +61,19 @@ class VehicleController extends AbstractController
                 ($currentPage - 1) * $limit
             );
         }
+
+        if ($type === 'mes_annonces') {
+            $user = $this->getUser();
+            $pagesNb = ceil(count($vehicleRepository->findBy(['user' => $user->getId()])) / $limit);
+        
+            $vehicles = $vehicleRepository->findBy(
+                ['user' => $user->getId()],
+                ['createdAt' => 'DESC'],
+                $limit,
+                ($currentPage - 1) * $limit
+            );
+        }
+
         return $this->render('vehicle/index.html.twig', [
             'vehicles' => $vehicles, 
             'pagesNb' => $pagesNb,

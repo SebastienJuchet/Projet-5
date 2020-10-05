@@ -28,9 +28,6 @@
                                 <a class="nav-link" href="{{ path("app_vehicle_create") }}">Nouvelle annonce</a>
                             </li>
                         {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path("app_logout") }}">Se déconnecter</a>
-                        </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path("app_register") }}">Créer un compte</a>
@@ -40,10 +37,24 @@
                         </li>
                     {% endif %}
                 </ul>
-                <form class="form-inline my-2 my-md-0">
-                    <input class="form-control" type="text" placeholder="Search">
-                </form>
             </div>
+            {% if app.user %}
+                <div id="user-identity">
+                    <div class="picture-profil mr-5">
+                        <img class="rounded-circle" src="{{ app.user | hashGravatar }}" alt="gravatar">
+                    </div>
+                    <div class="identity">
+                        <p class="mail">{{ app.user }}</p>
+                        <p class="vehicle-nb"><a href="{{ path("app_vehicle", {type: 'mes_annonces'}) }}">Voir mes {{ app.user | userVehicleNb }} annonce{{ (app.user|userVehicleNb > 1) ? 's' : ''}}</a></p>
+                        <p id="logout"><a class="btn btn-primary logout" href="{{ path("app_logout") }}">Se déconnecter</a></p>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <p>
+                                <a class="admin" href="{{ path('app_admin') }}">Gérer le site</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
         </nav>
         {% if app.user and app.user.isVerified == false %}
             <div class="alert alert-danger text-center">
