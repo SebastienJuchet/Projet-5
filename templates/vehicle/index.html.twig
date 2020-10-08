@@ -13,7 +13,7 @@
     </div>
     
     {% for vehicle in vehicles %}
-        <div class="row mt-5 py-2 border" id="card-vehicle">
+        <div class="row mt-5 py-2 border card-vehicle">
             <div class="col-6 col-lg-4 text-center">
             {% if vehicle.pictures is empty %}
                 <img src="{{ asset('pictures/default/sans-photo.jpg') }}" alt="sans photo" class="without-picture">
@@ -49,6 +49,7 @@
                         <p>{{ vehicle.createdat|date("d/m/Y") }} à {{ vehicle.createdat|date("H:i") }}</p>
                     </div>
                 </div>
+                <div class="d-none description-vehicle">{{ vehicle.description }}</div>
             </div>
         </div>
     {% endfor %}
