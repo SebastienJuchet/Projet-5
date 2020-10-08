@@ -1,0 +1,16 @@
+<div class="form-widget">
+    {% if field.value.count == 0 %}
+        <p>aucune image</p>
+    {% else %}
+        <p>{{ field.value.count }} {{ (field.value.count > 1) ? 'images' : 'image' }} </p>
+    {% endif %}
+    {% if app.request.attributes.get('_controller').1 == 'detail' %}
+        {% for picture in field.value %}
+            <img src="{{ asset('pictures/') ~ picture.name }}" class="without-picture" alt="Image">
+        {% endfor %}
+    {% else %}
+        {% for picture in field.value|slice(0, 1) %}
+            <img src="{{ asset('pictures/') ~ picture.name }}" class="without-picture" alt="Image">
+        {% endfor %}
+    {% endif %}
+</div>

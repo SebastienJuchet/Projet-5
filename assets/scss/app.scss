@@ -36,6 +36,7 @@ body{
 
             .identity-display {
                 top: 10vh;
+                z-index: 1000;
             }
 
             .admin {
@@ -71,9 +72,23 @@ body{
         }
     }
 
-    .without-photo {
+    /*Pictures size */
+    .without-picture {
         max-width: 320px;
         height: auto;
     }
-    
+
+    .picture-show {
+        border: 1px dashed $primary;
+        padding: 0.5rem;
+        max-width: 500px;
+        height: auto;
+    }
+
+    /*Admin*/
+    #header-logo {
+        a.logo {
+            background-color: #e3e7ed;
+        }
+    }
 }

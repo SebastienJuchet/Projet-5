@@ -7,8 +7,8 @@
                 <h3>Photos(s)</h3>
                 {% for picture in vehicle.pictures %}
                     <div class="my-3">
-                        <img src="{{ asset('pictures/') ~ picture.name }}" alt="Image">
-                        <a href="{{ path('app_delete_picture', {'id': picture.id}) }}" class="delete-picture align-top" data-token="{{ csrf_token('delete')  ~ picture.id }}"><i class="fas fa-trash-alt"></i></a>
+                        <img src="{{ asset('pictures/') ~ picture.name }}" class="without-picture" alt="Image">
+                        <a href="{{ path('app_delete_picture', {'id': picture.id}) }}" class="delete-picture align-top"><i class="fas fa-trash-alt"></i></a>
                     </div>
                 {% endfor %}
             {% endif %}

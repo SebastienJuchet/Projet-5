@@ -3,22 +3,30 @@
 {% block title 'Vehicule' %}
 
 {% block body %}
+    <div class="row mt-3">
+        <div class="col d-flex justify-content-center">
+            <form class="form-inline">
+                <input id="search-vehicle" class="form-control mr-2" type="text" placeholder="Rechercher">
+                <div class="btn btn-primary ml-2" id="btn-search">Chercher</div>
+            </form>
+        </div>
+    </div>
     
     {% for vehicle in vehicles %}
         <div class="row mt-5 py-2 border" id="card-vehicle">
             <div class="col-6 col-lg-4 text-center">
             {% if vehicle.pictures is empty %}
-                <img src="{{ asset('pictures/default/sans-photo.jpg') }}" alt="sans photo" class="without-photo">
+                <img src="{{ asset('pictures/default/sans-photo.jpg') }}" alt="sans photo" class="without-picture">
             {% else %}
                 {% for picture in vehicle.pictures|slice(0,1) %}
-                    <img src="{{ asset('pictures/') ~ picture.name }}" alt="Image" class="without-photo">
+                    <img src="{{ asset('pictures/') ~ picture.name }}" alt="Image" class="without-picture">
                 {% endfor %}
             {% endif %}
             </div>
             <div class="col-4 col-lg-8">
                 <div class="row">
                     <div class="col text-center">
-                        <a href="{{ path("app_vehicle_show", {"id": vehicle.id }) }}" class="nav-link"><h2>{{ vehicle.title }}</h2></a>
+                        <a href="{{ path("app_vehicle_show", {"id": vehicle.id }) }}" class="nav-link"><h2 class="title-vehicle">{{ vehicle.title }}</h2></a>
                     </div>
                 </div>
                 <div class="row">

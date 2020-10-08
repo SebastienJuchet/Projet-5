@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Controller\Utils\Utils;
 use App\Entity\Picture;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
@@ -31,47 +32,49 @@ class VehicleController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request ,VehicleRepository $vehicleRepository, string $type = 'all' ,int $currentPage = 1): Response
-    {
-        $limit = 5;
-        $type = $request->attributes->get('type');
-        if ($type === 'all') {
-            $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
-            $allVehicles = $vehicleRepository->findAll();
-            $pagesNb = ceil(count($allVehicles) / $limit);
-        }
+    public function index(Request $request ,VehicleRepository $vehicleRepository, string $type = Utils::TYPE_ALL ,int $currentPage = 1): Response
+    {      
+        $limit = Utils::LIMIT;
+        $type = $request->attributes->get(Utils::TYPE_ANONCES);
+        switch($type) {
+            case Utils::TYPE_ALL:
+                $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
+                $allVehicles = $vehicleRepository->findAll();
+                $pagesNb = ceil(count($allVehicles) / $limit);
+            break;
 
-        if ($type === 'sale') {
-            $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
-            $vehicles = $vehicleRepository->findBy(
-                ['sale' => 'vente'],
-                ['createdAt' => 'DESC'],
-                $limit,
-                ($currentPage - 1) * $limit
-            );
-        }
+            case Utils::TYPE_SALE:
+                    $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
+                $vehicles = $vehicleRepository->findBy(
+                    ['sale' => 'vente'],
+                    ['createdAt' => 'DESC'],
+                    $limit,
+                    ($currentPage - 1) * $limit
+                );
+            break;
 
-        if ($type === 'rent') {
-            $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
-        
-            $vehicles = $vehicleRepository->findBy(
-                ['sale' => 'location'],
-                ['createdAt' => 'DESC'],
-                $limit,
-                ($currentPage - 1) * $limit
-            );
-        }
+            case Utils::TYPE_RENT:
+                    $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
+            
+                $vehicles = $vehicleRepository->findBy(
+                    ['sale' => 'location'],
+                    ['createdAt' => 'DESC'],
+                    $limit,
+                    ($currentPage - 1) * $limit
+                );
+            break;
 
-        if ($type === 'mes_annonces') {
-            $user = $this->getUser();
-            $pagesNb = ceil(count($vehicleRepository->findBy(['user' => $user->getId()])) / $limit);
-        
-            $vehicles = $vehicleRepository->findBy(
-                ['user' => $user->getId()],
-                ['createdAt' => 'DESC'],
-                $limit,
-                ($currentPage - 1) * $limit
-            );
+            case Utils::MY_ANNONCES:
+                $user = $this->getUser();
+                $pagesNb = ceil(count($vehicleRepository->findBy(['user' => $user->getId()])) / $limit);
+            
+                $vehicles = $vehicleRepository->findBy(
+                    ['user' => $user->getId()],
+                    ['createdAt' => 'DESC'],
+                    $limit,
+                    ($currentPage - 1) * $limit
+                );
+            break;
         }
 
         return $this->render('vehicle/index.html.twig', [
@@ -189,11 +192,10 @@ class VehicleController extends AbstractController
     /**
      * @Route("/delete/picture/{id}", name="app_delete_picture", methods={"DELETE"})
      */
-    public function deleteImage(Request $request, PictureRepository $pictureRepository, $id)
+    public function deleteImage(Request $request, PictureRepository $pictureRepository, $id): JsonResponse
     {
         $picture = $pictureRepository->findOneBy(['id' => $id]);
         $name = $picture->getName();
-        dump($name);
         unlink($this->getParameter('pictures_directory') . '/' . $name);
 
         $this->em->remove($picture);
