@@ -19,10 +19,10 @@ class VehicleRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicle::class);
     }
 
-     /**
+    /**
      * @return Vehicle[] Returns an array of Vehicle objects
      */
-    
+
     public function findAllVehicle(int $currentPage, int $limit)
     {
         return $this->createQueryBuilder('v')
@@ -30,13 +30,12 @@ class VehicleRepository extends ServiceEntityRepository
             ->orderBy('v.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function findAllSale(int $currentPage, int $limit, $sale)
     {
-        
+
         return $this->createQueryBuilder('v')
             ->where('v.sale > ?1')
             ->setParameter(1, $sale)
@@ -44,8 +43,18 @@ class VehicleRepository extends ServiceEntityRepository
             ->orderBy('v.createdAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+    }
+
+    public function search(string $search, int $currentPage, int $limit)
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.title LIKE :searchText')
+            ->orWhere('v.description LIKE :searchText')
+            ->setParameter('searchText', '%' . $search . '%')
+            ->orderBy('v.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
     /*
     public function findOneBySomeField($value): ?Vehicle

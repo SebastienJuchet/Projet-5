@@ -2,18 +2,19 @@
 
 namespace App\Controller;
 
-use App\Controller\Utils\Utils;
 use App\Entity\Picture;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
+use App\Utils\AnnonceType;
 use App\Repository\PictureRepository;
 use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/vehicule")
@@ -26,61 +27,70 @@ class VehicleController extends AbstractController
     }
 
     /**
-     * @Route("/?type={type}&page={currentPage}", name="app_vehicle", methods={"GET"}, requirements={"currentPage"="\d+"})
+     * @Route("/?type={type}&page={currentPage}", name="app_vehicle", methods={"GET", "POST"}, requirements={"currentPage"="\d+"})
      *
      * @param VehicleRepository $vehicleRepository
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request ,VehicleRepository $vehicleRepository, string $type = Utils::TYPE_ALL ,int $currentPage = 1): Response
-    {      
-        $limit = Utils::LIMIT;
-        $type = $request->attributes->get(Utils::TYPE_ANONCES);
-        switch($type) {
-            case Utils::TYPE_ALL:
+    public function index(Request $request, VehicleRepository $vehicleRepository, string $type = AnnonceType::ALL, int $currentPage = 1): Response
+    {
+        $limit = AnnonceType::LIMIT;
+        $type = $request->attributes->get(AnnonceType::ANNONCE);
+        switch ($type) {
+            case AnnonceType::ALL:
                 $vehicles = $vehicleRepository->findAllVehicle($currentPage, $limit);
                 $allVehicles = $vehicleRepository->findAll();
                 $pagesNb = ceil(count($allVehicles) / $limit);
-            break;
+                break;
 
-            case Utils::TYPE_SALE:
-                    $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
+            case AnnonceType::SALE:
+                $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'vente'])) / $limit);
                 $vehicles = $vehicleRepository->findBy(
                     ['sale' => 'vente'],
                     ['createdAt' => 'DESC'],
                     $limit,
                     ($currentPage - 1) * $limit
                 );
-            break;
+                break;
 
-            case Utils::TYPE_RENT:
-                    $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
-            
+            case AnnonceType::RENT:
+                $pagesNb = ceil(count($vehicleRepository->findBy(['sale' => 'location'])) / $limit);
+
                 $vehicles = $vehicleRepository->findBy(
                     ['sale' => 'location'],
                     ['createdAt' => 'DESC'],
                     $limit,
                     ($currentPage - 1) * $limit
                 );
-            break;
+                break;
 
-            case Utils::MY_ANNONCES:
+            case AnnonceType::MY_ANNONCE:
                 $user = $this->getUser();
                 $pagesNb = ceil(count($vehicleRepository->findBy(['user' => $user->getId()])) / $limit);
-            
+
                 $vehicles = $vehicleRepository->findBy(
                     ['user' => $user->getId()],
                     ['createdAt' => 'DESC'],
                     $limit,
                     ($currentPage - 1) * $limit
                 );
-            break;
+                break;
+        }
+
+        if ($request->query->get(AnnonceType::SEARCH) !== null) {
+            $text = $request->query->get(AnnonceType::SEARCH);
+            $vehicles = $vehicleRepository->search($text, $currentPage, $limit);
+            $pagesNb = 1;
+            if ($vehicles === []) {
+                $this->addFlash('error', 'Aucun vehicule ne correspond à votre recherche');
+            }
         }
 
         return $this->render('vehicle/index.html.twig', [
-            'vehicles' => $vehicles, 
+            'vehicles' => $vehicles,
             'pagesNb' => $pagesNb,
-            'currentPage' => $currentPage
+            'currentPage' => $currentPage,
         ]);
     }
 
@@ -107,7 +117,7 @@ class VehicleController extends AbstractController
         $vehicle = new Vehicle;
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             //Récupère l'utilisateur
             $user = $this->getUser();
@@ -126,11 +136,11 @@ class VehicleController extends AbstractController
                 $picture->setName($safeName);
                 $vehicle->addPicture($picture);
             }
-            
+
             $vehicle = $form->getData();
             $vehicle->setCreatedAt(new \DateTime())
-                    ->setUpdatedAt(new \DateTime())
-                    ->setUser($user);
+                ->setUpdatedAt(new \DateTime())
+                ->setUser($user);
             $this->em->persist($vehicle);
             $this->em->flush();
 
@@ -154,13 +164,12 @@ class VehicleController extends AbstractController
      */
     public function edit(Vehicle $vehicle, Request $request): Response
     {
-        
         $form = $this->createForm(VehicleType::class, $vehicle);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //Récupère les images
             $pictures = $form->get('pictures')->getData();
-            
+
             //On boucle sur les images
             foreach ($pictures as $picture) {
                 //On créer un nom unique
@@ -182,7 +191,7 @@ class VehicleController extends AbstractController
             return $this->redirectToRoute('app_vehicle');
         }
 
-        
+
         return $this->render('vehicle/edit.html.twig', [
             'vehicle' => $vehicle,
             'form' => $form->createView()
@@ -214,11 +223,11 @@ class VehicleController extends AbstractController
      */
     public function delete(Request $request, Vehicle $vehicle): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$vehicle->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $vehicle->getId(), $request->request->get('_token'))) {
             $this->em->remove($vehicle);
             $this->em->flush();
         }
-           
+
         return $this->redirectToRoute('app_vehicle');
     }
 }

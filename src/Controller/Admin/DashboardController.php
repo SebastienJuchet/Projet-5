@@ -13,8 +13,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
+/**
+ * @IsGranted("ROLE_ADMIN")
+ */
 class DashboardController extends AbstractDashboardController
 {
     private $vehicleRepository;
@@ -68,8 +72,8 @@ class DashboardController extends AbstractDashboardController
     public function configureUserMenu(UserInterface $user): UserMenu
     {
         return parent::configureUserMenu($user)
-        ->setName($user->getUsername())
-        ->setGravatarEmail($user->getUsername())
-        ->displayUserAvatar(true);
+            ->setName($user->getUsername())
+            ->setGravatarEmail($user->getUsername())
+            ->displayUserAvatar(true);
     }
 }

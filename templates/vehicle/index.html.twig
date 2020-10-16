@@ -5,9 +5,9 @@
 {% block body %}
     <div class="row mt-3">
         <div class="col d-flex justify-content-center">
-            <form class="form-inline">
-                <input id="search-vehicle" class="form-control mr-2" type="text" placeholder="Rechercher">
-                <div class="btn btn-primary ml-2" id="btn-search">Chercher</div>
+            <form method="GET" action="{{ path("app_vehicle") }}" class="form-inline">
+                <input name="search" id="search-vehicle" class="form-control mr-2" type="text" placeholder="Rechercher">
+                <button class="btn btn-primary ml-2" id="btn-search">Chercher</button>
             </form>
         </div>
     </div>
