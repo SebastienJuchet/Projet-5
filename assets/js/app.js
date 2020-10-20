@@ -1,12 +1,45 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
 import '../scss/app.scss';
+import '../js/picture';
+
+let btnFormVehicle = document.querySelector('#btn-form-vehicle')
+let url = window.location.pathname 
+
+if (url.includes('/vehicule/edit') || url.includes('/vehicule/create')) {
+    let geocoder = new MapboxGeocoder({
+            accessToken: 'pk.eyJ1IjoiYnJvd2x5NDAiLCJhIjoiY2s2OTQ1b3AwMGIxcjNrcWo0MXdtZTRseCJ9.goBmMVra4yIQgexoPzL3fw',
+            countries: 'fr',
+            types: 'country,region,place,locality',
+            placeholder: 'Entrez votre ville'
+        })
+    
+    geocoder.addTo('#geocoder');
+
+    geocoder.on('result', (e) => {
+        let city = e.result.place_name
+        let long = e.result.center[0]
+        let lat = e.result.center[1]
+
+        document.querySelector('#vehicle_city').value = city
+        document.querySelector('#vehicle_longitude').value = long
+        document.querySelector('#vehicle_latitude').value = lat
+    })
+}
+
+if (document.querySelector('#map')) {
+    let longitude = document.querySelector('#longitude').value
+    let latitude = document.querySelector('#latitude').value
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYnJvd2x5NDAiLCJhIjoiY2s2OTQ1b3AwMGIxcjNrcWo0MXdtZTRseCJ9.goBmMVra4yIQgexoPzL3fw'
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+        center: [longitude, latitude], // starting position [lng, lat]
+        zoom: 10 // starting zoom
+    })
+
+    let marker = new mapboxgl.Marker()
+        .setLngLat([longitude, latitude])
+        .addTo(map)
+}
 
 let picture = document.querySelector('.picture-profil')
 let modal = document.querySelector('.identity')

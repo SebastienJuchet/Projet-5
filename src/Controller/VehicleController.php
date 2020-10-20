@@ -35,6 +35,7 @@ class VehicleController extends AbstractController
      */
     public function index(Request $request, VehicleRepository $vehicleRepository, string $type = AnnonceType::ALL, int $currentPage = 1): Response
     {
+
         $limit = AnnonceType::LIMIT;
         $type = $request->attributes->get(AnnonceType::ANNONCE);
         switch ($type) {

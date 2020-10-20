@@ -37,7 +37,7 @@ class Vehicle
     private $model;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="datetime")
      */
     private $year;
 
@@ -72,7 +72,7 @@ class Vehicle
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
-    
+
     /**
      * @ORM\Column(type="datetime")
      */
@@ -93,6 +93,21 @@ class Vehicle
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="vehicle", orphanRemoval=true, cascade={"persist"})
      */
     private $pictures;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $longitude;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $latitude;
 
     public function __construct()
     {
@@ -140,18 +155,18 @@ class Vehicle
         return $this;
     }
 
-    public function getYear(): ?string
+    public function getYear(): ?\DateTimeInterface
     {
         return $this->year;
     }
 
-    public function setYear(string $year): self
+    public function setYear(\DateTimeInterface $year): self
     {
         $this->year = $year;
 
         return $this;
     }
- 
+
     public function getFuelType(): ?string
     {
         return $this->fuelType;
@@ -287,6 +302,42 @@ class Vehicle
                 $picture->setVehicle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(float $latitude): self
+    {
+        $this->latitude = $latitude;
 
         return $this;
     }

@@ -2,7 +2,31 @@
     <div class="card-body">
         <h3 class="card-title text-center">Création de l'annonce</h3>
         {{ form_start(form) }}
+            <div class="row mx-auto">
+                <div class="col">{{ form_row(form.title) }}</div>
+                <div class="col">{{ form_row(form.sale) }}</div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col">{{ form_row(form.mark) }}</div>
+                <div class="col">{{ form_row(form.model) }}</div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col">{{ form_row(form.fuelType) }}</div>
+                <div class="col">{{ form_row(form.boxType) }}</div>
+                <div class="col">{{ form_row(form.kms) }}</div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col">{{ form_row(form.price) }}</div>
+                <div class="col">{{ form_row(form.year) }}</div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col-6">{{ form_row(form.description) }}</div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col-4">{{ form_row(form.pictures) }}</div>
+            </div>
         {{ form_widget(form) }}
+            <div id="geocoder" class="label mb-3 ml-3"></div>
             {% if app.request.attributes.get('_route') == 'app_vehicle_edit' %}
                 <h3>Photos(s)</h3>
                 {% for picture in vehicle.pictures %}
@@ -12,7 +36,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            <button type="submit" class="btn btn-primary btn-block">
+            <button type="submit" class="btn btn-primary btn-block" id="btn-form-vehicle">
                 {{ (app.request.get('_route') == 'app_vehicle_create') ? 'Créer' : 'Modifier' }}
             </button> 
         {{ form_end(form) }}

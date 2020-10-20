@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}  
 
 {% block body %}
-    <div class="test">
+    <div class="mb-3">
         <div class="row">
             <div class="col mt-4">
                 <h3 class="h1 text-center">{{ vehicle.title }}</h3>
@@ -28,7 +28,7 @@
                 <p>
                     <span class="font-weight-bold">Marque :</span> {{ vehicle.mark }}<br>
                     <span class="font-weight-bold">Modèle :</span> {{ vehicle.model }}<br>
-                    <span class="font-weight-bold">Année :</span> {{ vehicle.year }}<br>
+                    <span class="font-weight-bold">Mise en circulation :</span> {{ vehicle.year | date("d/m/Y") }}<br>
                     <span class="font-weight-bold">Nombres de kms :</span> {{ vehicle.kms }}<br>
                     <span class="font-weight-bold">Energie :</span> {{ vehicle.fuelType }}<br>
                     <span class="font-weight-bold">Boîte de vitesse :</span> {{ vehicle.boxtype }}<br>
@@ -45,9 +45,12 @@
             </p>
         </div>
     </div>
+    <div id="map"></div>
+    <input id="longitude" type="hidden" value="{{ vehicle.longitude }}">
+    <input id="latitude" type="hidden" value="{{ vehicle.latitude }}">
     {% if app.user == vehicle.user %}
         <hr>  
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-2">
                 {% include "vehicle/partials/_delete.html.twig" %}
             </div>

@@ -1,94 +1,98 @@
 @import "_variables.scss";
 @import "~bootstrap/scss/bootstrap";
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
-body{
-    font-family: 'Roboto', sans-serif;
-    nav.navbar {
-        #title-nav {
-            color: $text !important;
-        }
-        background-color: $primary;
-        ul {
-            li {
-                a {
-                    color: $text !important;
-                }
-            }
-        }
-
-        #user-identity {
-            position: relative;
-
-            .identity {
-                top: -50vh;
-                position: absolute;
-                background-color: #e9ecef;
-                color: $text;
-                height: 25vh;
-                width: 20vw;
-                border-radius: 15px;
-                padding: 15px;
-                line-height: 1rem;
-                right: 5%;
-                transition: all .5s;
-            }
-
-            .identity-display {
-                top: 10vh;
-                z-index: 1000;
-            }
-
-            .admin {
-                color: $danger;
-            }
-        }
-
+body {
+  font-family: "Roboto", sans-serif;
+  nav.navbar {
+    #title-nav {
+      color: $text !important;
     }
-    main {
-        #card-vehicle {
-            .row {
-                a.nav-link {
-                    color: $card_link !important;
-                }
-                p {
-                    font-size: 1.2rem;
-                    line-height: 1.1rem;
-                }
-            }
+    background-color: $primary;
+    ul {
+      li {
+        a {
+          color: $text !important;
         }
-
-        #form_create_vehicle {
-            label {
-                font-size: 1.2rem;
-            }
-        }
-
-        .delete-picture {
-            i.fas {
-                font-size: 1.6rem;
-                color: $danger;
-            }
-        }
+      }
     }
 
-    /*Pictures size */
-    .without-picture {
-        max-width: 320px;
-        height: auto;
-    }
+    #user-identity {
+      position: relative;
 
-    .picture-show {
-        border: 1px dashed $primary;
-        padding: 0.5rem;
-        max-width: 500px;
-        height: auto;
-    }
+      .identity {
+        top: -50vh;
+        position: absolute;
+        background-color: #e9ecef;
+        color: $text;
+        height: 25vh;
+        width: 20vw;
+        border-radius: 15px;
+        padding: 15px;
+        line-height: 1rem;
+        right: 5%;
+        transition: all 0.5s;
+      }
 
-    /*Admin*/
-    #header-logo {
-        a.logo {
-            background-color: #e3e7ed;
+      .identity-display {
+        top: 10vh;
+        z-index: 1000;
+      }
+
+      .admin {
+        color: $danger;
+      }
+    }
+  }
+  main {
+    #card-vehicle {
+      .row {
+        a.nav-link {
+          color: $card_link !important;
         }
+        p {
+          font-size: 1.2rem;
+          line-height: 1.1rem;
+        }
+      }
     }
+
+    #form_create_vehicle {
+      label {
+        font-size: 1.2rem;
+      }
+    }
+
+    .delete-picture {
+      i.fas {
+        font-size: 1.6rem;
+        color: $danger;
+      }
+    }
+
+    #map {
+      width: 70%;
+      height: 50vh;
+    }
+  }
+
+  /*Pictures size */
+  .without-picture {
+    max-width: 320px;
+    height: auto;
+  }
+
+  .picture-show {
+    border: 1px dashed $primary;
+    padding: 0.5rem;
+    max-width: 500px;
+    height: auto;
+  }
+
+  /*Admin*/
+  #header-logo {
+    a.logo {
+      background-color: #e3e7ed;
+    }
+  }
 }
