@@ -45,7 +45,12 @@
             </p>
         </div>
     </div>
-    <div id="map"></div>
+    <hr>
+    <div id="map" class="my-4"></div>
+    <hr>
+    <div class="row">
+        <div class="col"><a href="mailto:{{ vehicle.user.email }}">Envoyer un mail au proprietaire</a></div>
+    </div>
     <input id="longitude" type="hidden" value="{{ vehicle.longitude }}">
     <input id="latitude" type="hidden" value="{{ vehicle.latitude }}">
     {% if app.user == vehicle.user %}

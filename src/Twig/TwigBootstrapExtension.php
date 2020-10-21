@@ -30,7 +30,7 @@ class TwigBootstrapExtension extends AbstractExtension
 
     public function totalVehicleNumber($user)
     {
-        $allVehicles = count($this->vehicleRepository->findAll());
+        $allVehicles = count($this->vehicleRepository->findBy(['user' => $user]));
 
         return $allVehicles;
     }

@@ -1,7 +1,24 @@
 import '../scss/app.scss';
-import '../js/picture';
+import '../js/picture.js';
+import FormValidate from '../js/formValidate.js'
 
 let btnFormVehicle = document.querySelector('#btn-form-vehicle')
+if (btnFormVehicle) {
+    btnFormVehicle.addEventListener('click', (e) => {
+        let inputTitle = new FormValidate('vehicle_title').checkText()
+        let inputMark = new FormValidate('vehicle_mark').checkText()
+        let inputModel = new FormValidate('vehicle_model').checkText()
+        let inputDescription = new FormValidate('vehicle_description').checkTextarea()
+        let inputCity = new FormValidate('vehicle_city').checkCity()
+        
+        let inputPrice = new FormValidate('vehicle_price').checkPrice()
+        let inputKms = new FormValidate('vehicle_kms').checkKms()
+         if (!inputTitle || !inputMark || !inputModel || !inputDescription || !inputCity || !inputPrice || !inputKms) {
+             e.preventDefault()
+         }
+    })
+}
+
 let url = window.location.pathname 
 
 if (url.includes('/vehicule/edit') || url.includes('/vehicule/create')) {
