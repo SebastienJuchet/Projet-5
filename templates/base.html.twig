@@ -2,8 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
         <script async src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
         <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
@@ -18,6 +19,23 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-4">
+            {% if app.user %}
+                <div id="user-identity">
+                    <div class="picture-profil mr-5">
+                        <img class="rounded-circle" src="{{ app.user | hashGravatar }}" alt="gravatar">
+                    </div>
+                    <div class="identity">
+                        <p class="mail">{{ app.user }}</p>
+                        <p class="vehicle-nb"><a href="{{ path("app_vehicle", {type: 'my_annonce'}) }}">Voir mes {{ app.user | userVehicleNb }} annonce{{ (app.user|userVehicleNb > 1) ? 's' : ''}}</a></p>
+                        <p id="logout"><a class="btn btn-primary logout" href="{{ path("app_logout") }}">Se déconnecter</a></p>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <p>
+                                <a class="admin" href="{{ path('app_admin') }}">Gérer le site</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
             <p class="h3 mx-3" id="title-nav">LocaVenteAuto</p>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-bar-home" aria-controls="nav-bar-home" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,23 +62,6 @@
                     {% endif %}
                 </ul>
             </div>
-            {% if app.user %}
-                <div id="user-identity">
-                    <div class="picture-profil mr-5">
-                        <img class="rounded-circle" src="{{ app.user | hashGravatar }}" alt="gravatar">
-                    </div>
-                    <div class="identity">
-                        <p class="mail">{{ app.user }}</p>
-                        <p class="vehicle-nb"><a href="{{ path("app_vehicle", {type: 'my_annonce'}) }}">Voir mes {{ app.user | userVehicleNb }} annonce{{ (app.user|userVehicleNb > 1) ? 's' : ''}}</a></p>
-                        <p id="logout"><a class="btn btn-primary logout" href="{{ path("app_logout") }}">Se déconnecter</a></p>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <p>
-                                <a class="admin" href="{{ path('app_admin') }}">Gérer le site</a>
-                            </p>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
         </nav>
         {% if app.user and app.user.isVerified == false %}
             <div class="alert alert-danger text-center">

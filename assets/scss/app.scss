@@ -5,10 +5,11 @@
 body {
   font-family: "Roboto", sans-serif;
   nav.navbar {
+    background-color: $primary;
+
     #title-nav {
       color: $text !important;
     }
-    background-color: $primary;
     ul {
       li {
         a {
@@ -21,16 +22,15 @@ body {
       position: relative;
 
       .identity {
-        top: -50vh;
+        top: -60rem;
         position: absolute;
         background-color: #e9ecef;
         color: $text;
-        height: 25vh;
-        width: 20vw;
+        width: 18rem;
+        height: 10rem;
         border-radius: 15px;
         padding: 15px;
         line-height: 1rem;
-        right: 5%;
         transition: all 0.5s;
       }
 
@@ -38,14 +38,14 @@ body {
         top: 10vh;
         z-index: 1000;
       }
+    }
 
-      .admin {
-        color: $danger;
-      }
+    .admin {
+      color: $danger;
     }
   }
   main {
-    #card-vehicle {
+    .card-vehicle {
       .row {
         a.nav-link {
           color: $card_link !important;
@@ -53,6 +53,12 @@ body {
         p {
           font-size: 1.2rem;
           line-height: 1.1rem;
+        }
+      }
+
+      h2 {
+        @media (max-width: 768px) {
+          font-size: 1.5rem;
         }
       }
     }
@@ -76,10 +82,25 @@ body {
     }
   }
 
+  /*Admin*/
+  #header-logo {
+    a.logo {
+      background-color: #e3e7ed;
+    }
+  }
+
+  header.main-header > nav.navbar {
+    background-color: #e3e7ed;
+  }
+
   /*Pictures size */
   .without-picture {
     max-width: 320px;
     height: auto;
+    @media (min-width: 320px) and (max-width: 768px) {
+      padding-top: 50;
+      max-width: 150px;
+    }
   }
 
   .picture-show {
@@ -87,12 +108,5 @@ body {
     padding: 0.5rem;
     max-width: 500px;
     height: auto;
-  }
-
-  /*Admin*/
-  #header-logo {
-    a.logo {
-      background-color: #e3e7ed;
-    }
   }
 }

@@ -13,10 +13,34 @@
             {{ form_start(registrationForm) }}
                 {{ form_row(registrationForm.email) }}
                 {{ form_row(registrationForm.plainPassword) }}
-                {{ form_row(registrationForm.agreeTerms) }}
+                <div class="row ml-1">
+                    {{ form_row(registrationForm.agreeTerms) }}
+                    <div class="text-primary" data-toggle="modal" data-target="#modal-termes">Acceptez les termes</div>
+                </div>
 
                 <button type="submit" class="btn btn-primary">Créer le compte</button>
             {{ form_end(registrationForm) }}
         </div>
+    </div>
+    <div class="modal fade" id="modal-termes" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Termes du site</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Vous êtes sur le point d'accépter les termes de mon site qui est un site démo pour ma formation d'OpenClassRooms!!!
+            <br>
+            Un mail de confirmation vous sera envoyer pour valider votre adresse mail. <br>
+            Merci de votre compréhension et de votre indulgence</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
     </div>
 {% endblock %}
